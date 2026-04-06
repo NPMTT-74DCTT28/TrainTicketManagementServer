@@ -71,6 +71,7 @@ public class NhanVienServiceImpl implements NhanVienService {
                 .gioiTinh(nhanVien.getGioiTinh())
                 .sdt(nhanVien.getSdt())
                 .email(nhanVien.getEmail())
+                .diaChi(nhanVien.getDiaChi())
                 .vaiTro(nhanVien.getVaiTro())
                 .build();
     }

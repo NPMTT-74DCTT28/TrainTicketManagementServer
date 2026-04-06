@@ -14,5 +14,6 @@ public class NhanVienResponse {
     private String gioiTinh;
     private String sdt;
     private String email;
+    private String diaChi;
     private String vaiTro;
 }
