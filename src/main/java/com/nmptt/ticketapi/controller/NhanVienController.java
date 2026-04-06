@@ -22,7 +22,7 @@ public class NhanVienController {
         List<NhanVienResponse> data = nhanVienService.getAllNhanVien();
 
         ApiResponse<List<NhanVienResponse>> response = ApiResponse.<List<NhanVienResponse>>builder()
-                .code(HttpStatus.OK.value())
+                .code(HttpStatus.FOUND.value())
                 .message("Lấy danh sách nhân viên thành công!")
                 .data(data)
                 .build();
@@ -34,7 +34,7 @@ public class NhanVienController {
         NhanVienResponse data = nhanVienService.getNhanVienByMa(maNhanVien);
 
         ApiResponse<NhanVienResponse> response = ApiResponse.<NhanVienResponse>builder()
-                .code(HttpStatus.OK.value())
+                .code(HttpStatus.FOUND.value())
                 .message("Lấy thông tin nhân viên thành công!")
                 .data(data)
                 .build();
@@ -46,7 +46,7 @@ public class NhanVienController {
         NhanVienResponse data = nhanVienService.createNhanVien(request);
 
         ApiResponse<NhanVienResponse> response = ApiResponse.<NhanVienResponse>builder()
-                .code(HttpStatus.OK.value())
+                .code(HttpStatus.CREATED.value())
                 .message("Thêm thông tin nhân viên thành công!")
                 .data(data)
                 .build();
