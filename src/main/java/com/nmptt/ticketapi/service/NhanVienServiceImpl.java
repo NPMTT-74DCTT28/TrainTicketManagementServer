@@ -1,12 +1,16 @@
 package com.nmptt.ticketapi.service;
 
+import com.nmptt.ticketapi.dto.request.ChangePasswordRequest;
+import com.nmptt.ticketapi.dto.request.LoginRequest;
 import com.nmptt.ticketapi.dto.request.NhanVienRequest;
 import com.nmptt.ticketapi.dto.response.NhanVienResponse;
 import com.nmptt.ticketapi.entity.NhanVien;
+import com.nmptt.ticketapi.exception.BadCredentialsException;
 import com.nmptt.ticketapi.exception.DuplicateDataException;
 import com.nmptt.ticketapi.exception.ResourceNotFoundException;
 import com.nmptt.ticketapi.repository.NhanVienRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NhanVienServiceImpl implements NhanVienService {
     private final NhanVienRepository nhanVienRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<NhanVienResponse> getAllNhanVien() {
@@ -35,9 +40,10 @@ public class NhanVienServiceImpl implements NhanVienService {
     public NhanVienResponse createNhanVien(NhanVienRequest request) {
         checkTrung(request);
 
+        String encodedPassword = passwordEncoder.encode(request.getMatKhau());
         NhanVien newNhanVien = NhanVien.builder()
                 .maNhanVien(request.getMaNhanVien())
-                .matKhau(request.getMatKhau())
+                .matKhau(encodedPassword)
                 .hoTen(request.getHoTen())
                 .ngaySinh(request.getNgaySinh())
                 .gioiTinh(request.getGioiTinh())
@@ -55,7 +61,7 @@ public class NhanVienServiceImpl implements NhanVienService {
         checkTrung(request);
 
         NhanVien existing = nhanVienRepository.findById(request.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Id không tồn tại"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin nhân viên."));
 
         existing.setHoTen(request.getHoTen());
         existing.setNgaySinh(request.getNgaySinh());
@@ -71,8 +77,33 @@ public class NhanVienServiceImpl implements NhanVienService {
     @Override
     public void deleteNhanVien(int id) {
         NhanVien nhanVien = nhanVienRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Id không hợp lệ."));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin nhân viên."));
         nhanVienRepository.delete(nhanVien);
+    }
+
+    @Override
+    public NhanVienResponse login(LoginRequest request) {
+        String pwIncorrectMsg = "Tài khoản hoặc mật khẩu không chính xác.";
+        NhanVien nhanVien = nhanVienRepository.findByMaNhanVien(request.getMaNhanVien())
+                .orElseThrow(() -> new ResourceNotFoundException(pwIncorrectMsg));
+        boolean isPwMatch = passwordEncoder.matches(request.getMatKhau(), nhanVien.getMatKhau());
+        if (!isPwMatch) {
+            throw new BadCredentialsException(pwIncorrectMsg);
+        }
+        return mapToResponse(nhanVien);
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request) {
+        NhanVien nhanVien = nhanVienRepository.findById(request.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin nhân viên."));
+
+        if (!passwordEncoder.matches(request.getOldPassword(), nhanVien.getMatKhau())) {
+            throw new BadCredentialsException("Mật khẩu cũ không chính xác.");
+        }
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+        nhanVien.setMatKhau(encodedPassword);
+        nhanVienRepository.save(nhanVien);
     }
 
     private void checkTrung(NhanVienRequest request) {
