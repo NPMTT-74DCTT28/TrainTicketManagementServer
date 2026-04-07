@@ -22,7 +22,7 @@ public class NhanVienController {
         List<NhanVienResponse> data = nhanVienService.getAllNhanVien();
 
         ApiResponse<List<NhanVienResponse>> response = ApiResponse.<List<NhanVienResponse>>builder()
-                .code(HttpStatus.FOUND.value())
+                .code(HttpStatus.OK.value())
                 .message("Lấy danh sách nhân viên thành công!")
                 .data(data)
                 .build();
