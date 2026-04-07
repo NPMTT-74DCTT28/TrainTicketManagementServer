@@ -4,7 +4,6 @@ import com.nmptt.ticketapi.dto.request.ChangePasswordRequest;
 import com.nmptt.ticketapi.dto.request.LoginRequest;
 import com.nmptt.ticketapi.dto.request.NhanVienRequest;
 import com.nmptt.ticketapi.dto.response.NhanVienResponse;
-import com.nmptt.ticketapi.specification.NhanVienSpecification;
 
 import java.util.List;
 
