@@ -1,0 +1,12 @@
+package com.nmptt.ticketapi.dto.thongke;
+
+import lombok.Data;
+
+import java.time.LocalDate;
+
+@Data
+public class DoanhThuNgayDTO {
+    private LocalDate ngay;
+    private int soVeBan;
+    private double doanhThu;
+}
