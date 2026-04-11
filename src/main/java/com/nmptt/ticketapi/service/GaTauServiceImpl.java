@@ -11,8 +11,9 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class GaTauServiceImpl implements GaTauService{
+public class GaTauServiceImpl implements GaTauService {
     private final GaTauRepository gaTauRepository;
+
     @Override
     public List<GaTau> getAllGaTau() {
         return gaTauRepository.findAll();
@@ -33,7 +34,7 @@ public class GaTauServiceImpl implements GaTauService{
     @Override
     public void deleteGaTau(Integer id) {
         GaTau gaTau = gaTauRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Không tìm thấy thông tin ga tàu"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin ga tàu"));
         gaTauRepository.delete(gaTau);
     }
 
@@ -42,6 +43,7 @@ public class GaTauServiceImpl implements GaTauService{
         String key = "%" + search + "%";
         return gaTauRepository.findByMaGaLikeOrTenGaLike(key, key);
     }
+
     private void checkTrung(GaTau gaTau) {
         if (gaTauRepository.existsByMaGaAndIdNot(gaTau.getMaGa(), gaTau.getId())) {
             throw new DuplicateDataException("Mã ga đã tồn tại!");

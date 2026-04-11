@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GaTauController {
     private final GaTauService gaTauService;
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<GaTau>>> getAllGaTau() {
         List<GaTau> data = gaTauService.getAllGaTau();
@@ -25,6 +26,7 @@ public class GaTauController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @PostMapping
     public ResponseEntity<ApiResponse<GaTau>> createGaTau(@RequestBody GaTau gaTau) {
         GaTau data = gaTauService.createGaTau(gaTau);
@@ -35,6 +37,7 @@ public class GaTauController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @PutMapping
     public ResponseEntity<ApiResponse<GaTau>> updateGaTau(@RequestBody GaTau gaTau) {
         GaTau data = gaTauService.updateGaTau(gaTau);
@@ -55,6 +58,7 @@ public class GaTauController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<GaTau>>> searchGaTau(
             @RequestParam(required = false, defaultValue = "") String key) {

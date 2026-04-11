@@ -17,7 +17,7 @@ public class GaTau {
 
     @Column(name = "ma_ga", unique = true, nullable = false, length = 20)
     private String maGa;
-    @Column(name = "ten_ga", unique = true,  nullable = false, length = 100)
+    @Column(name = "ten_ga", unique = true, nullable = false, length = 100)
     private String tenGa;
     @Column(name = "dia_chi", nullable = false)
     private String diaChi;
