@@ -68,4 +68,8 @@ public class JwtUtil {
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
+    public String extractVaiTro(String token) {
+        return extractClaim(token, claims -> claims.get("vaiTro").toString());
+    }
 }
