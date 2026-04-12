@@ -46,7 +46,7 @@ public class TuyenDuongController {
                 .message("Thêm tuyến đường thành công!")
                 .data(data)
                 .build();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @PutMapping
     public ResponseEntity<ApiResponse<TuyenDuongResponse>> updateTuyenDuong(@RequestBody TuyenDuongRequest tuyenDuong) {
