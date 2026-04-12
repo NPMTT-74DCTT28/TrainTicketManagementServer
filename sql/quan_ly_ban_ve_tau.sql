@@ -20,6 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `quan_ly_ban_ve_tau`
 --
+DROP DATABASE IF EXISTS `quan_ly_ban_ve_tau`;
 CREATE DATABASE IF NOT EXISTS `quan_ly_ban_ve_tau` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `quan_ly_ban_ve_tau`;
 

@@ -22,6 +22,7 @@ import java.util.List;
 public class ThongKeController {
     private final ThongKeService thongKeService;
 
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     @GetMapping("/doanh-thu-7d")
     public ResponseEntity<ApiResponse<List<DoanhThuBayNgayDTO>>> getDoanhThuBayNgay() {
         List<DoanhThuBayNgayDTO> data = thongKeService.getDoanhThuBayNgay();
