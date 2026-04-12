@@ -7,6 +7,7 @@ import com.nmptt.ticketapi.service.NhanVienService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/nhan-vien")
+@PreAuthorize("hasRole('Quản trị viên')")
 public class NhanVienController {
     private final NhanVienService nhanVienService;
 
@@ -30,7 +32,7 @@ public class NhanVienController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<NhanVienResponse>> getNhanVienByMa(@PathVariable int id) {
+    public ResponseEntity<ApiResponse<NhanVienResponse>> getNhanVienById(@PathVariable int id) {
         NhanVienResponse data = nhanVienService.getNhanVienById(id);
 
         ApiResponse<NhanVienResponse> response = ApiResponse.<NhanVienResponse>builder()

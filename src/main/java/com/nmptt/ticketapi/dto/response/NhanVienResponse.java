@@ -17,4 +17,5 @@ public class NhanVienResponse {
     private String email;
     private String diaChi;
     private String vaiTro;
+    private String token;
 }

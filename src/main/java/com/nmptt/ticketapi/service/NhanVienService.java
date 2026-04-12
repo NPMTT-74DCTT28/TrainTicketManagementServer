@@ -9,6 +9,7 @@ import com.nmptt.ticketapi.exception.BadCredentialsException;
 import com.nmptt.ticketapi.exception.DuplicateDataException;
 import com.nmptt.ticketapi.exception.ResourceNotFoundException;
 import com.nmptt.ticketapi.repository.NhanVienRepository;
+import com.nmptt.ticketapi.security.JwtUtil;
 import com.nmptt.ticketapi.specification.NhanVienSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +40,8 @@ public interface NhanVienService {
     class NhanVienServiceImpl implements NhanVienService {
         private final NhanVienRepository repository;
         private final PasswordEncoder passwordEncoder;
+
+        private final JwtUtil jwtUtil;
 
         @Override
         public List<NhanVienResponse> getAllNhanVien() {
@@ -108,7 +111,9 @@ public interface NhanVienService {
             if (!isPwMatch) {
                 throw new BadCredentialsException(pwIncorrectMsg);
             }
-            return mapToResponse(nhanVien);
+            NhanVienResponse response = mapToResponse(nhanVien);
+            response.setToken(jwtUtil.generateToken(nhanVien.getMaNhanVien(), nhanVien.getVaiTro()));
+            return response;
         }
 
         @Override
