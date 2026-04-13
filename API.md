@@ -1,27 +1,97 @@
-# Tài liệu API - Hệ thống quản lý vé tàu
+# Hướng dẫn sử dụng API - Hệ thống quản lý vé tàu
 
 ## Thông tin
 
-* **Application name:** `TrainTicketManagementAPI`
-* **API version:** `v1`
-* **Base URL:**
+* **Tên ứng dụng:** `TrainTicketManagementAPI`
+* **Phiên bản API:** `v1`
+* **Phương thức xác thực:** `Bearer Token`
+* **URL gốc:**
 
 ```
 http://localhost:8080/api/v1
 ```
 
+***Lưu ý bảo mật***: Ngoại trừ API đăng nhập, tất cả các API khác đều yêu cầu truyền token vào header của request với
+định dạng:
+`Authorization: Bearer <token_của_bạn>`
+
 ---
 
 ## Danh sách API
 
-### 1. Quản lý thông tin nhân viên
+### Xác thực/Tài khoản
 
-***1.1. Lấy danh sách nhân viên***
+***Đăng nhập***
+
+* **URL:** `/auth/login`
+* **Phương thức:** `POST`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** `Mọi vai trò`
+* **Request body:**
+
+```json
+{
+  "maNhanVien": "Mã nhân viên",
+  "matKhau": "Mật khẩu"
+}
+```
+
+* **Success response (200 - OK)**
+
+```json
+{
+  "code": 200,
+  "message": "Đăng nhập thành công!",
+  "data": {
+    "diaChi": "Địa chỉ",
+    "email": "example@domain.com",
+    "gioiTinh": "Nam",
+    "hoTen": "Nguyễn Văn A",
+    "id": 1,
+    "maNhanVien": "NV001",
+    "ngaySinh": "1980-01-01",
+    "sdt": "0123456789",
+    "token": "Bearer.authentication_TOKEN",
+    "vaiTro": "Quản trị viên"
+  }
+}
+```
+
+***Đổi mật khẩu***
+
+* **URL:** `/auth/change-pw`
+* **Phương thức:** `POST`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** `Bất kỳ ai đã đăng nhập`
+* **Request body:**
+
+```json
+{
+  "id": 1,
+  "oldPassword": "Mật khẩu cũ",
+  "newPassword": "Mật khẩu mới"
+}
+```
+
+* **Success response (200 - OK)**
+
+```json
+{
+  "code": 200,
+  "message": "Đổi mật khẩu thành công!",
+  "data": null
+}
+```
+
+### Quản lý thông tin nhân viên
+
+***Lấy danh sách nhân viên***
 
 * **URL:** `/nhan-vien`
-* **Method:** `GET`
-
-**Success response (200 OK)**
+* **Phương thức:** `GET`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** Chỉ `Quản trị viên` (Yêu cầu header mang token của admin)
+* **Success response (200 - OK)**
 
 ```json
 {
@@ -30,25 +100,39 @@ http://localhost:8080/api/v1
   "data": [
     {
       "diaChi": "Địa chỉ",
-      "email": "Email",
-      "gioiTinh": "Giới tính",
-      "hoTen": "Họ tên",
+      "email": "example@domain.com",
+      "gioiTinh": "Nam",
+      "hoTen": "Nguyễn Văn A",
       "id": 1,
-      "maNhanVien": "Mã nhân viên",
-      "ngaySinh": "Ngày sinh",
-      "sdt": "Số điện thoại",
-      "vaiTro": "Vai trò"
+      "maNhanVien": "NV001",
+      "ngaySinh": "1980-01-01",
+      "sdt": "0123456789",
+      "token": null,
+      "vaiTro": "Quản trị viên"
+    },
+    {
+      "diaChi": "Địa chỉ",
+      "email": "example1@domain.com",
+      "gioiTinh": "Nữ",
+      "hoTen": "Nguyễn Thị B",
+      "id": 2,
+      "maNhanVien": "NV002",
+      "ngaySinh": "1990-01-01",
+      "sdt": "0321654987",
+      "token": null,
+      "vaiTro": "Nhân viên"
     }
   ]
 }
 ```
 
-***1.2. Lấy thông tin nhân viên với mã nhân viên cho trước***
+***Lấy thông tin nhân viên bằng ID***
 
 * **URL:** `/nhan-vien/{id}`
-* **Method:** `GET`
-
-**Path variables**
+* **Phương thức:** `GET`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** Chỉ `Quản trị viên`
+* **Path variables**
 
 ```
 | Biến | Kiểu dữ liệu |  Mô tả |
@@ -56,48 +140,50 @@ http://localhost:8080/api/v1
 | id | int | Số ID nhân viên (VD: 123, 999) |
 ```
 
-**Success response 200 OK**
+* **Success response (200 - OK)**
 
 ```json
 {
   "code": 200,
-  "message": "Lấy thông tin nhân viên thành công!",
+  "message": "Đăng nhập thành công!",
   "data": {
     "diaChi": "Địa chỉ",
-    "email": "Email",
-    "gioiTinh": "Giới tính",
-    "hoTen": "Họ tên",
+    "email": "example@domain.com",
+    "gioiTinh": "Nam",
+    "hoTen": "Nguyễn Văn A",
     "id": 1,
-    "maNhanVien": "Mã nhân viên",
-    "ngaySinh": "Ngày sinh",
-    "sdt": "Số điện thoại",
-    "vaiTro": "Vai trò"
+    "maNhanVien": "NV001",
+    "ngaySinh": "1900-01-01",
+    "sdt": "0123456789",
+    "token": null,
+    "vaiTro": "Quản trị viên"
   }
 }
 ```
 
-***1.3. Thêm thông tin nhân viên mới***
+***Thêm thông tin nhân viên mới***
 
 * **URL:** `/nhan-vien`
-* **Method:** `POST`
-
-**Request body: YES**
+* **Phương thức:** `POST`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** Chỉ `Quản trị viên`
+* **Request body:**
 
 ```json
 {
   "diaChi": "Địa chỉ",
-  "email": "Email",
-  "gioiTinh": "Giới tính",
-  "hoTen": "Họ tên",
-  "maNhanVien": "Mã nhân viên",
+  "email": "example2@domain.com",
+  "gioiTinh": "Nam",
+  "hoTen": "Đinh Văn C",
+  "maNhanVien": "NV003",
   "matKhau": "Mật khẩu",
-  "ngaySinh": "Ngày sinh",
-  "sdt": "Số điện thoại",
-  "vaiTro": "Vai trò"
+  "ngaySinh": "1991-01-01",
+  "sdt": "0123789654",
+  "vaiTro": "Nhân viên"
 }
 ```
 
-**Success response 201 CREATED**
+* **Success response (201 - CREATED)**
 
 ```json
 {
@@ -105,41 +191,43 @@ http://localhost:8080/api/v1
   "message": "Thêm thông tin nhân viên thành công!",
   "data": {
     "diaChi": "Địa chỉ",
-    "email": "Email",
-    "gioiTinh": "Giới tính",
-    "hoTen": "Họ tên",
-    "id": 1,
-    "maNhanVien": "Mã nhân viên",
-    "ngaySinh": "Ngày sinh",
-    "sdt": "Số điện thoại",
-    "vaiTro": "Vai trò"
+    "email": "example2@domain.com",
+    "gioiTinh": "Nam",
+    "hoTen": "Đinh Văn C",
+    "id": 3,
+    "maNhanVien": "NV003",
+    "ngaySinh": "1991-01-01",
+    "sdt": "0123789654",
+    "token": null,
+    "vaiTro": "Nhân viên"
   }
 }
 ```
 
-***1.4. Cập nhật thông tin nhân viên***
+***Cập nhật thông tin nhân viên/thông tin cá nhân***
 
 * **URL:** `/nhan-vien`
-* **Method:** `PUT`
-
-**Request body: YES**
+* **Phương thức:** `PUT`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** `Quản trị viên`(sửa tất cả), `Nhân viên`(sửa thông tin cá nhân)
+* **Request body:**
 
 ```json
 {
   "diaChi": "Địa chỉ",
-  "email": "Email",
-  "gioiTinh": "Giới tính",
-  "hoTen": "Họ tên",
-  "id": 1,
-  "maNhanVien": "Mã nhân viên",
-  "matKhau": "Mật khẩu",
-  "ngaySinh": "Ngày sinh",
-  "sdt": "Số điện thoại",
-  "vaiTro": "Vai trò"
+  "email": "example2@domain.com",
+  "gioiTinh": "Nữ",
+  "hoTen": "Đinh Thị D",
+  "id": 3,
+  "maNhanVien": "NV003",
+  "matKhau": "(Không thay đổi bất kể có truyền dữ liệu hay không)",
+  "ngaySinh": "1991-03-31",
+  "sdt": "0123789654",
+  "vaiTro": "(Không nên thay đổi nếu chọn cập nhật thông tin cá nhân)"
 }
 ```
 
-**Success response 200 OK**
+* **Success response 200 OK**
 
 ```json
 {
@@ -147,32 +235,34 @@ http://localhost:8080/api/v1
   "message": "Cập nhật thông tin nhân viên thành công!",
   "data": {
     "diaChi": "Địa chỉ",
-    "email": "Email",
-    "gioiTinh": "Giới tính",
-    "hoTen": "Họ tên",
-    "id": 1,
-    "maNhanVien": "Mã nhân viên",
-    "ngaySinh": "Ngày sinh",
-    "sdt": "Số điện thoại",
-    "vaiTro": "Vai trò"
+    "email": "example2@domain.com",
+    "gioiTinh": "Nữ",
+    "hoTen": "Đinh Thị D",
+    "id": 3,
+    "maNhanVien": "NV003",
+    "ngaySinh": "1991-03-31",
+    "sdt": "0123789654",
+    "token": null,
+    "vaiTro": "Quản trị viên/Nhân viên"
   }
 }
 ```
 
-***1.5. Xoá thông tin nhân viên***
+***Xoá thông tin nhân viên***
 
 * **URL:** `/nhan-vien/{id}`
-* **Method:** `DELETE`
-
-**Path variables**
+* **Phương thức:** `DELETE`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** Chỉ `Quản trị viên`
+* **Path variables**
 
 ```
 | Biến | Kiểu dữ liệu | Mô tả |
 
-| id | int | Số ID nhân viên (VD: 123, 999) |
+| id | int | Số ID nhân viên (VD: 1, 2) |
 ```
 
-**Success response 200 OK**
+* **Success response (200 - OK)**
 
 ```json
 {
@@ -182,12 +272,13 @@ http://localhost:8080/api/v1
 }
 ```
 
-***1.6. Tìm kiếm nhân viên***
+***Tìm kiếm nhân viên***
 
 * **URL:** `/search`
-* **Method:** `GET`
-
-**Query params**
+* **Phương thức:** `GET`
+* **Yêu cầu token:** `Có`
+* **Quyền hạn:** Chỉ `Quản trị viên`
+* **Query params**
 
 ```
 | Tham số | Kiểu dữ liệu | Bắt buộc | Mô tả |
@@ -197,7 +288,7 @@ http://localhost:8080/api/v1
 | vaiTro | String | No | Vai trò |
 ```
 
-**Success response 200 OK**
+* **Success response (200 - OK)**
 
 ```json
 {
@@ -206,16 +297,28 @@ http://localhost:8080/api/v1
   "data": [
     {
       "diaChi": "Địa chỉ",
-      "email": "Email",
-      "gioiTinh": "Giới tính",
-      "hoTen": "Họ tên",
+      "email": "example@domain.com",
+      "gioiTinh": "Nam",
+      "hoTen": "Nguyễn Văn A",
       "id": 1,
-      "maNhanVien": "Mã nhân viên",
-      "ngaySinh": "Ngày sinh",
-      "sdt": "Số điện thoại",
-      "vaiTro": "Vai trò"
+      "maNhanVien": "NV001",
+      "ngaySinh": "1980-01-01",
+      "sdt": "0123456789",
+      "token": null,
+      "vaiTro": "Quản trị viên"
+    },
+    {
+      "diaChi": "Địa chỉ",
+      "email": "example1@domain.com",
+      "gioiTinh": "Nữ",
+      "hoTen": "Nguyễn Thị B",
+      "id": 2,
+      "maNhanVien": "NV002",
+      "ngaySinh": "1990-01-01",
+      "sdt": "0321654987",
+      "token": null,
+      "vaiTro": "Nhân viên"
     }
   ]
 }
 ```
-

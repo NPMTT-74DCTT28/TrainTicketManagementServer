@@ -27,6 +27,8 @@ public interface NhanVienService {
 
     NhanVienResponse updateNhanVien(NhanVienRequest nhanVienRequest);
 
+    NhanVienResponse updateInfo(NhanVienRequest nhanVienRequest);
+
     void deleteNhanVien(int id);
 
     NhanVienResponse login(LoginRequest request);
@@ -91,6 +93,23 @@ public interface NhanVienService {
             existing.setEmail(request.getEmail());
             existing.setDiaChi(request.getDiaChi());
             existing.setVaiTro(request.getVaiTro());
+
+            return mapToResponse(repository.save(existing));
+        }
+
+        @Override
+        public NhanVienResponse updateInfo(NhanVienRequest request) {
+            checkTrung(request);
+
+            NhanVien existing = repository.findById(request.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin nhân viên."));
+
+            existing.setHoTen(request.getHoTen());
+            existing.setNgaySinh(request.getNgaySinh());
+            existing.setGioiTinh(request.getGioiTinh());
+            existing.setSdt(request.getSdt());
+            existing.setEmail(request.getEmail());
+            existing.setDiaChi(request.getDiaChi());
 
             return mapToResponse(repository.save(existing));
         }
