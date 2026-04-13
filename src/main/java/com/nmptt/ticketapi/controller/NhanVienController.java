@@ -67,6 +67,19 @@ public class NhanVienController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/personal-info")
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
+    public ResponseEntity<ApiResponse<NhanVienResponse>> updateInfo(@RequestBody NhanVienRequest request) {
+        NhanVienResponse data = nhanVienService.updateInfo(request);
+
+        ApiResponse<NhanVienResponse> response = ApiResponse.<NhanVienResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Cập nhật thông tin cá nhân thành công!")
+                .data(data)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteNhanVien(@PathVariable int id) {
         nhanVienService.deleteNhanVien(id);
