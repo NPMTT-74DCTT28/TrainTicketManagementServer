@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -36,11 +37,11 @@ public class LichTrinh {
 
     @NotNull
     @Column(name = "ngay_di", nullable = false)
-    private LocalDate ngayDi;
+    private LocalDateTime ngayDi;
 
     @NotNull
     @Column(name = "ngay_den", nullable = false)
-    private LocalDate ngayDen;
+    private LocalDateTime ngayDen;
 
     @Size(max = 20)
     @NotNull
