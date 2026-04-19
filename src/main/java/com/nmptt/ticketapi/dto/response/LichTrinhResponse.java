@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ public class LichTrinhResponse {
     private String maLichTrinh;
     private Integer idTau;
     private Integer idTuyenDuong;
-    private LocalDate ngayDi;
-    private LocalDate ngayDen;
+    private LocalDateTime ngayDi;
+    private LocalDateTime ngayDen;
     private String trangThai;
 }
