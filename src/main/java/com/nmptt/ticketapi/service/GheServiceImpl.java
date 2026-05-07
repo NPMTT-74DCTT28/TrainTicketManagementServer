@@ -69,17 +69,14 @@ public class GheServiceImpl implements GheService {
     }
 
     @Override
-    public List<GheResponse> searchGhe(String soGhe, Integer idToaTau) {
-        String key = "%" + soGhe + "%";
-        return gheRepository.findBySoGheLikeOrIdToaTau(key, idToaTau)
+    public List<GheResponse> searchGhe(String keyword) {
+        String search = "%" + keyword + "%";
+        return gheRepository.findBySoGheLike(search)
                 .stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
     private void checkTrung(GheRequest gheRequest) {
-        // Kiểm tra xem số ghế đã tồn tại trong toa đó chưa (trừ chính nó khi update)
         if (gheRepository.existsBySoGheAndIdNot(gheRequest.getSoGhe(), gheRequest.getId())) {
-            // Lưu ý: Logic này cần tinh chỉnh trong Repository để check theo cặp (soGhe, idToaTau)
-            // giống như Unique Key trong SQL
             throw new DuplicateDataException("Số ghế này đã tồn tại trong hệ thống!");
         }
     }

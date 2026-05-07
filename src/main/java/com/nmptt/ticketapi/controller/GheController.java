@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ghe")
+@RequestMapping("/api/v1/ghe")
 @AllArgsConstructor
 public class GheController {
     private final GheService gheService;
@@ -43,8 +43,7 @@ public class GheController {
 
     @GetMapping("/search")
     public ResponseEntity<List<GheResponse>> searchGhe(
-            @RequestParam(required = false) String soGhe,
-            @RequestParam(required = false) Integer idToaTau) {
-        return ResponseEntity.ok(gheService.searchGhe(soGhe, idToaTau));
+            @RequestParam(required = false, defaultValue = "") String keyword) {
+        return ResponseEntity.ok(gheService.searchGhe(keyword));
     }
 }

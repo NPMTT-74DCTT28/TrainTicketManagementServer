@@ -11,5 +11,5 @@ public interface GheService {
     GheResponse createGhe(GheRequest gheRequest);
     GheResponse updateGhe(GheRequest gheRequest);
     void deleteGhe(Integer id);
-    List<GheResponse> searchGhe(String soGhe, Integer idToaTau);
+    List<GheResponse> searchGhe(String keyword);
 }
