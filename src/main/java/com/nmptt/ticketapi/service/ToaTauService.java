@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface ToaTauService {
     List<ToaTauResponse> getAllToaTau();
+
     ToaTauResponse getToaTauById(Integer id);
+
     ToaTauResponse createToaTau(ToaTauRequest toaTauRequest);
+
     ToaTauResponse updateToaTau(ToaTauRequest toaTauRequest);
+
     void deleteToaTau(Integer id);
+
     List<ToaTauResponse> searchToaTau(String search);
 }

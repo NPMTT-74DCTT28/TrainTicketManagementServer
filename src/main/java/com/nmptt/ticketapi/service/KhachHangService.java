@@ -6,10 +6,10 @@ import com.nmptt.ticketapi.exception.ResourceNotFoundException;
 import com.nmptt.ticketapi.repository.KhachHangRepository;
 import com.nmptt.ticketapi.specification.KhachHangSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
 
 public interface KhachHangService {
     List<KhachHang> getAllKhachHang();
@@ -40,7 +40,7 @@ public interface KhachHangService {
 
         public KhachHang getKhachHangById(int id) {
             KhachHang khachHang = repository.findById(id)
-                    .orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy thông tin khách hàng"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin khách hàng"));
             return mapToResponse(khachHang);
         }
 

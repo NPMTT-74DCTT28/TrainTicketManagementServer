@@ -27,7 +27,7 @@ public class TuyenDuongServiceImpl implements TuyenDuongService {
     @Override
     public TuyenDuongResponse getTuyenDuongById(Integer id) {
         TuyenDuong tuyenDuong = tuyenDuongRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy thông tin tuyến đường!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin tuyến đường!"));
         return maptoResponse(tuyenDuong);
     }
 

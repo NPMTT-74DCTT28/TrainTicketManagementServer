@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface GheRepository extends JpaRepository<Ghe, Integer> {
     Optional<Ghe> findById(Integer id);
+
     List<Ghe> findBySoGheLike(String keyword);
 
     boolean existsBySoGheAndIdNot(String soGhe, Integer id);

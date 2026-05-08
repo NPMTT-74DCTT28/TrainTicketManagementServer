@@ -22,7 +22,7 @@ public class GaTauServiceImpl implements GaTauService {
     @Override
     public GaTau getGaTauById(Integer id) {
         GaTau gaTau = gaTauRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy thông tin ga tàu!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin ga tàu!"));
         return gaTau;
     }
 

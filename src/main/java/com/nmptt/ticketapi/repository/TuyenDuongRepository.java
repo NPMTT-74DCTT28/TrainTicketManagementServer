@@ -10,7 +10,10 @@ import java.util.Optional;
 @Repository
 public interface TuyenDuongRepository extends JpaRepository<TuyenDuong, Integer> {
     Optional<TuyenDuong> findById(Integer id);
+
     List<TuyenDuong> findByMaTuyenLikeOrTenTuyenLike(String maTuyen, String tenTuyen);
+
     boolean existsByMaTuyenAndIdNot(String maTuyen, Integer id);
+
     boolean existsByTenTuyenAndIdNot(String tenTuyen, Integer id);
 }

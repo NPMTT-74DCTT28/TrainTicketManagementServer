@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LichTrinhController {
     private LichTrinhService lichTrinhService;
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<LichTrinhResponse>>> getAllLichTrinh() {
         List<LichTrinhResponse> data = lichTrinhService.getAllLichTrinh();
@@ -26,6 +27,7 @@ public class LichTrinhController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LichTrinhResponse>> getLichTrinhByMa(@PathVariable Integer id) {
         LichTrinhResponse data = lichTrinhService.getLichTrinhById(id);
@@ -36,6 +38,7 @@ public class LichTrinhController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @PostMapping
     public ResponseEntity<ApiResponse<LichTrinhResponse>> createLichTrinh(@RequestBody LichTrinhRequest lichTrinh) {
         LichTrinhResponse data = lichTrinhService.createLichTrinh(lichTrinh);
@@ -46,6 +49,7 @@ public class LichTrinhController {
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
     @PutMapping
     public ResponseEntity<ApiResponse<LichTrinhResponse>> updateLichTrinh(@RequestBody LichTrinhRequest lichTrinh) {
         LichTrinhResponse data = lichTrinhService.updateLichTrinh(lichTrinh);
@@ -56,6 +60,7 @@ public class LichTrinhController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteLichTrinh(@PathVariable Integer id) {
         lichTrinhService.deleteLichTrinh(id);
@@ -65,9 +70,10 @@ public class LichTrinhController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<LichTrinhResponse>>> searchLichTrinh(
-            @RequestParam(required = false, defaultValue = "")String key){
+            @RequestParam(required = false, defaultValue = "") String key) {
         List<LichTrinhResponse> data = lichTrinhService.searchLichTrinh(key);
         ApiResponse<List<LichTrinhResponse>> response = ApiResponse.<List<LichTrinhResponse>>builder()
                 .code(HttpStatus.OK.value())
