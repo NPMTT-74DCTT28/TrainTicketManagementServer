@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface GaTauService {
     List<GaTau> getAllGaTau();
+
     GaTau getGaTauById(Integer id);
 
     GaTau createGaTau(GaTau gaTau);

@@ -26,6 +26,7 @@ public class GaTauController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<GaTau>> getGaTauByMa(@PathVariable Integer id) {
         GaTau data = gaTauService.getGaTauById(id);
@@ -36,6 +37,7 @@ public class GaTauController {
                 .build();
         return ResponseEntity.ok(response);
     }
+
     @PostMapping
     public ResponseEntity<ApiResponse<GaTau>> createGaTau(@RequestBody GaTau gaTau) {
         GaTau data = gaTauService.createGaTau(gaTau);

@@ -53,7 +53,7 @@ public class KhachHangController {
     }
 
     @PutMapping
-    public  ResponseEntity<ApiResponse<KhachHang>> updateKhachHang(@RequestBody KhachHang request) {
+    public ResponseEntity<ApiResponse<KhachHang>> updateKhachHang(@RequestBody KhachHang request) {
         KhachHang data = khachHangService.updateKhachHang(request);
 
         ApiResponse<KhachHang> response = ApiResponse.<KhachHang>builder()

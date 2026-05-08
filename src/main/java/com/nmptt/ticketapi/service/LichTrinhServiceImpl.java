@@ -16,8 +16,9 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class LichTrinhServiceImpl implements LichTrinhService{
+public class LichTrinhServiceImpl implements LichTrinhService {
     private final LichTrinhRepository lichTrinhRepository;
+
     @Override
     public List<LichTrinhResponse> getAllLichTrinh() {
         return lichTrinhRepository.findAll()
@@ -27,7 +28,7 @@ public class LichTrinhServiceImpl implements LichTrinhService{
     @Override
     public LichTrinhResponse getLichTrinhById(Integer id) {
         LichTrinh lichTrinh = lichTrinhRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy thông tin lịch trình!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin lịch trình!"));
         return maptoResponse(lichTrinh);
     }
 
@@ -54,7 +55,7 @@ public class LichTrinhServiceImpl implements LichTrinhService{
     public LichTrinhResponse updateLichTrinh(LichTrinhRequest lichTrinhRequest) {
         checkTrung(lichTrinhRequest);
         LichTrinh lichTrinh = lichTrinhRepository.findById(lichTrinhRequest.getId())
-                .orElseThrow(() ->new ResourceNotFoundException("Không tìm thấy lịch trình!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch trình!"));
         Tau idTau = new Tau();
         idTau.setId(lichTrinhRequest.getIdTau());
         TuyenDuong idTuyenDuong = new TuyenDuong();
@@ -73,19 +74,19 @@ public class LichTrinhServiceImpl implements LichTrinhService{
     @Override
     public void deleteLichTrinh(Integer id) {
         LichTrinh lichTrinh = lichTrinhRepository.findById(id)
-                .orElseThrow(() ->new ResourceNotFoundException("Không tìm thấy lịch trình!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch trình!"));
         lichTrinhRepository.delete(lichTrinh);
     }
 
     @Override
     public List<LichTrinhResponse> searchLichTrinh(String search) {
-        String key =  "%" + search + "%";
+        String key = "%" + search + "%";
         return lichTrinhRepository.findByMaLichTrinhLike(key)
                 .stream().map(this::maptoResponse).collect(Collectors.toList());
     }
 
     private void checkTrung(LichTrinhRequest lichTrinhRequest) {
-        if (lichTrinhRepository.existsByMaLichTrinhAndIdNot(lichTrinhRequest.getMaLichTrinh(), lichTrinhRequest.getId())){
+        if (lichTrinhRepository.existsByMaLichTrinhAndIdNot(lichTrinhRequest.getMaLichTrinh(), lichTrinhRequest.getId())) {
             throw new DuplicateDataException("Mã Lịch Trình đã tồn tại!");
         }
     }
