@@ -5,12 +5,13 @@ import com.nmptt.ticketapi.dto.response.VeTauResponse;
 import com.nmptt.ticketapi.entity.*;
 import com.nmptt.ticketapi.exception.DuplicateDataException;
 import com.nmptt.ticketapi.exception.ResourceNotFoundException;
+import com.nmptt.ticketapi.repository.GheRepository;
+import com.nmptt.ticketapi.repository.LichTrinhRepository;
 import com.nmptt.ticketapi.repository.VeTauRepository;
-import com.nmptt.ticketapi.specification.VeTauSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,13 +26,19 @@ public interface VeTauService {
 
     void deleteVeTau(int id);
 
-    List<VeTauResponse> searchVeTau(String keyword, String maVe, LocalDateTime ngayDatVe);
+    List<VeTauResponse> searchVeTau(String maVe);
+
+    double tinhGiaVe(int idLichTrinh, int idGhe);
+
+    double tinhGiaVeByMaVe(int id);
 
     @Service
     @RequiredArgsConstructor
 
     class VeTauServiceImpl implements VeTauService {
         private final VeTauRepository repository;
+        private final LichTrinhRepository lichTrinhRepository;
+        private final GheRepository gheRepository;
 
         @Override
         public List<VeTauResponse> getAllVeTau() {
@@ -62,7 +69,6 @@ public interface VeTauService {
                     .lichTrinh(lichTrinh)
                     .ghe(ghe)
                     .nhanVien(nhanVien)
-                    .ngayDat(request.getNgayDatVe())
                     .giaVe(request.getGiaVe())
                     .trangThai(request.getTrangThai())
                     .build();
@@ -85,7 +91,6 @@ public interface VeTauService {
             existing.setLichTrinh(lichTrinh);
             existing.setGhe(ghe);
             existing.setNhanVien(nhanVien);
-            existing.setNgayDat(request.getNgayDatVe());
             existing.setGiaVe(request.getGiaVe());
             existing.setTrangThai(request.getTrangThai());
 
@@ -100,11 +105,36 @@ public interface VeTauService {
         }
 
         @Override
-        public List<VeTauResponse> searchVeTau(String keyword, String maVe, LocalDateTime ngayDatVe) {
-            List<VeTau> veTau = repository.findAll(VeTauSpecification.filter(keyword, maVe, ngayDatVe));
+        public List<VeTauResponse> searchVeTau(String maVe) {
+            List<VeTau> veTau = repository.findAllByMaVeLike(maVe);
             return veTau.stream()
                     .map(this::mapToResponse)
                     .collect(Collectors.toList());
+        }
+
+        @Override
+        @Transactional(readOnly = true)
+        public double tinhGiaVe(int idLichTrinh, int idGhe) {
+            LichTrinh lichTrinh = lichTrinhRepository.findById(idLichTrinh)
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy lịch trình"));
+            Ghe ghe = gheRepository.findById(idGhe)
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy ghế"));
+
+            TuyenDuong tuyenDuong = lichTrinh.getIdTuyenDuong();
+            ToaTau toaTau = ghe.getIdToaTau();
+            LoaiToa loaiToa = toaTau.getIdLoaiToa();
+
+            return tuyenDuong.getGiaCoBan()
+                    .multiply(loaiToa.getHeSoGia())
+                    .doubleValue();
+        }
+
+        @Override
+        @Transactional(readOnly = true)
+        public double tinhGiaVeByMaVe(int id) {
+            VeTau veTau = repository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy vé với mã: " + id));
+            return tinhGiaVe(veTau.getLichTrinh().getId(), veTau.getGhe().getId());
         }
 
         private void checkTrung(VeTauRequest request) {
@@ -127,4 +157,6 @@ public interface VeTauService {
                     .build();
         }
     }
+
+
 }
