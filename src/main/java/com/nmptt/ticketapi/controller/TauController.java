@@ -6,19 +6,20 @@ import com.nmptt.ticketapi.service.TauService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/tau")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/tau")
+@PreAuthorize("hasRole('Quản trị viên')")
 public class TauController {
     private final TauService tauService;
-    private final JsonMapper.Builder builder;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<Tau>>> getAll() {
         List<Tau> data = tauService.getAllTau();
         ApiResponse<List<Tau>> response = ApiResponse.<List<Tau>>builder().code(HttpStatus.OK.value()).message("Lấy danh sách tàu thành công").data(data).build();
@@ -54,6 +55,7 @@ public class TauController {
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<Tau>>> searchTau(@RequestParam(required = false, defaultValue = "") String key) {
         String searchkey = "%" + key + "%";
         List<Tau> data = tauService.searchTau(searchkey, searchkey);

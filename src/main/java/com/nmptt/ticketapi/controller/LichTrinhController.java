@@ -4,18 +4,20 @@ import com.nmptt.ticketapi.dto.request.LichTrinhRequest;
 import com.nmptt.ticketapi.dto.response.ApiResponse;
 import com.nmptt.ticketapi.dto.response.LichTrinhResponse;
 import com.nmptt.ticketapi.service.LichTrinhService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/lich-trinh")
-@AllArgsConstructor
+@PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
 public class LichTrinhController {
-    private LichTrinhService lichTrinhService;
+    private final LichTrinhService lichTrinhService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<LichTrinhResponse>>> getAllLichTrinh() {

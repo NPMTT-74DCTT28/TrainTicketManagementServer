@@ -16,8 +16,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/thong-ke")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/thong-ke")
 @PreAuthorize("hasRole('Quản trị viên')")
 public class ThongKeController {
     private final ThongKeService thongKeService;

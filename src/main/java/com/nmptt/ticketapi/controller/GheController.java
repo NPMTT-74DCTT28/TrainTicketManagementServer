@@ -3,19 +3,22 @@ package com.nmptt.ticketapi.controller;
 import com.nmptt.ticketapi.dto.request.GheRequest;
 import com.nmptt.ticketapi.dto.response.GheResponse;
 import com.nmptt.ticketapi.service.GheService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/ghe")
-@AllArgsConstructor
+@PreAuthorize("hasRole('Quản trị viên')")
 public class GheController {
     private final GheService gheService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<List<GheResponse>> getAllGhe() {
         return ResponseEntity.ok(gheService.getAllGhe());
     }

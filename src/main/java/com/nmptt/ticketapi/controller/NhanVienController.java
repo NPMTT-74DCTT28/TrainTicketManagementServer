@@ -20,6 +20,7 @@ public class NhanVienController {
     private final NhanVienService nhanVienService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<NhanVienResponse>>> getAllNhanVien() {
         List<NhanVienResponse> data = nhanVienService.getAllNhanVien();
 

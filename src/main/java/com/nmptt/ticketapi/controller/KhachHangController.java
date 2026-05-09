@@ -6,6 +6,7 @@ import com.nmptt.ticketapi.service.KhachHangService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/khach-hang")
+@PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
 public class KhachHangController {
     private final KhachHangService khachHangService;
 

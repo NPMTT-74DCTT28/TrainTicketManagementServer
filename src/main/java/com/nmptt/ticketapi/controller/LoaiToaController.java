@@ -6,18 +6,21 @@ import com.nmptt.ticketapi.service.LoaiToaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/loai-toa")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/loai-toa")
+@PreAuthorize("hasRole('Quản trị viên')")
 public class LoaiToaController {
     private final LoaiToaService loaiToaService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<LoaiToa>>> getAll() {
         List<LoaiToa> data = loaiToaService.getAllLoaiToa();
         ApiResponse<List<LoaiToa>> response = ApiResponse.<List<LoaiToa>>builder()

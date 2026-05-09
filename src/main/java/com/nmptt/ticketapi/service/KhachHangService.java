@@ -67,6 +67,7 @@ public interface KhachHangService {
             KhachHang existing = repository.findById(request.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin khách hàng"));
 
+            existing.setCccd(request.getCccd());
             existing.setHoTen(request.getHoTen());
             existing.setNgaySinh(request.getNgaySinh());
             existing.setGioiTinh(request.getGioiTinh());

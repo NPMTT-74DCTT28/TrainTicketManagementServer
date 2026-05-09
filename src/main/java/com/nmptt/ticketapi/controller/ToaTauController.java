@@ -4,21 +4,24 @@ import com.nmptt.ticketapi.dto.request.ToaTauRequest;
 import com.nmptt.ticketapi.dto.response.ApiResponse;
 import com.nmptt.ticketapi.dto.response.ToaTauResponse;
 import com.nmptt.ticketapi.service.ToaTauService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/toa-tau")
-@AllArgsConstructor
+@PreAuthorize("hasRole('Quản trị viên')")
 public class ToaTauController {
 
     private final ToaTauService toaTauService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<ToaTauResponse>>> getAllToaTau() {
         List<ToaTauResponse> data = toaTauService.getAllToaTau();
         ApiResponse<List<ToaTauResponse>> response = ApiResponse.<List<ToaTauResponse>>builder()
@@ -73,6 +76,7 @@ public class ToaTauController {
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<ToaTauResponse>>> searchToaTau(
             @RequestParam(required = false, defaultValue = "") String key) {
         List<ToaTauResponse> data = toaTauService.searchToaTau(key);

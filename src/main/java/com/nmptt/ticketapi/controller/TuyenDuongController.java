@@ -4,20 +4,23 @@ import com.nmptt.ticketapi.dto.request.TuyenDuongRequest;
 import com.nmptt.ticketapi.dto.response.ApiResponse;
 import com.nmptt.ticketapi.dto.response.TuyenDuongResponse;
 import com.nmptt.ticketapi.service.TuyenDuongService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/tuyen_duong")
-@AllArgsConstructor
+@PreAuthorize("hasRole('Quản trị viên')")
 public class TuyenDuongController {
-    private TuyenDuongService tuyenDuongService;
+    private final TuyenDuongService tuyenDuongService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<TuyenDuongResponse>>> getAllTuyenDuong() {
         List<TuyenDuongResponse> data = tuyenDuongService.getAllTuyenDuong();
         ApiResponse<List<TuyenDuongResponse>> response = ApiResponse.<List<TuyenDuongResponse>>builder()
@@ -72,6 +75,7 @@ public class TuyenDuongController {
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
     public ResponseEntity<ApiResponse<List<TuyenDuongResponse>>> searchTuyenDuong(
             @RequestParam(required = false, defaultValue = "") String key) {
         List<TuyenDuongResponse> data = tuyenDuongService.searchTuyenDuong(key);
