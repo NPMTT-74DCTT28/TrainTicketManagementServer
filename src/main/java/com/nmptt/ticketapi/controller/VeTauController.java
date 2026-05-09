@@ -3,14 +3,12 @@ package com.nmptt.ticketapi.controller;
 import com.nmptt.ticketapi.dto.request.VeTauRequest;
 import com.nmptt.ticketapi.dto.response.ApiResponse;
 import com.nmptt.ticketapi.dto.response.VeTauResponse;
-import com.nmptt.ticketapi.entity.VeTau;
 import com.nmptt.ticketapi.service.VeTauService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -80,10 +78,9 @@ public class VeTauController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<VeTauResponse>>> searchVeTau(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String maVe,
-            @RequestParam(required = false)LocalDateTime ngayDatVe) {
-        List<VeTauResponse> data = veTauService.searchVeTau(keyword, maVe, ngayDatVe);
+            @RequestParam(required = false, defaultValue = "") String maVe) {
+        String keyword = "%" + maVe + "%";
+        List<VeTauResponse> data = veTauService.searchVeTau(keyword);
 
         ApiResponse<List<VeTauResponse>> response = ApiResponse.<List<VeTauResponse>>builder()
                 .code(HttpStatus.OK.value())
@@ -93,4 +90,27 @@ public class VeTauController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/gia-ve")
+    public ResponseEntity<ApiResponse<Double>> tinhGiaVe(
+            @RequestParam int idLichTrinh,
+            @RequestParam int idGhe) {
+        double gia = veTauService.tinhGiaVe(idLichTrinh, idGhe);
+        ApiResponse<Double> response = ApiResponse.<Double>builder()
+                .code(HttpStatus.OK.value())
+                .message("Tính giá vé thành công")
+                .data(gia)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/gia-ve/{id}")
+    public ResponseEntity<ApiResponse<Double>> tinhGiaTheoMaVe(@PathVariable int id) {
+        double gia = veTauService.tinhGiaVeByMaVe(id);
+        ApiResponse<Double> response = ApiResponse.<Double>builder()
+                .code(HttpStatus.OK.value())
+                .message("Tính giá vé từ mã vé thành công")
+                .data(gia)
+                .build();
+        return ResponseEntity.ok(response);
+    }
 }
