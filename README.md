@@ -40,4 +40,4 @@ Xem **[API.md](./API.md)** — danh sách endpoint, phân quyền, ví dụ đă
 
 ## Module client
 
-Ứng dụng máy trạm nằm trong repo chị em: **TrainTicketManagementClient** (Swing, gọi `http://localhost:8080/api/v1`).
+Ứng dụng máy trạm nằm trong repo chị em: [**TrainTicketManagementClient**](https://github.com/NPMTT-74DCTT28/TrainTicketManagementClient)(Swing, gọi `http://localhost:8080/api/v1`).
