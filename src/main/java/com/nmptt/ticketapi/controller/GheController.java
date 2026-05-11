@@ -1,0 +1,52 @@
+package com.nmptt.ticketapi.controller;
+
+import com.nmptt.ticketapi.dto.request.GheRequest;
+import com.nmptt.ticketapi.dto.response.GheResponse;
+import com.nmptt.ticketapi.service.GheService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/ghe")
+@PreAuthorize("hasRole('Quản trị viên')")
+public class GheController {
+    private final GheService gheService;
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('Quản trị viên', 'Nhân viên')")
+    public ResponseEntity<List<GheResponse>> getAllGhe() {
+        return ResponseEntity.ok(gheService.getAllGhe());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GheResponse> getGheById(@PathVariable Integer id) {
+        return ResponseEntity.ok(gheService.getGheById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<GheResponse> createGhe(@RequestBody GheRequest gheRequest) {
+        return ResponseEntity.ok(gheService.createGhe(gheRequest));
+    }
+
+    @PutMapping
+    public ResponseEntity<GheResponse> updateGhe(@RequestBody GheRequest gheRequest) {
+        return ResponseEntity.ok(gheService.updateGhe(gheRequest));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteGhe(@PathVariable Integer id) {
+        gheService.deleteGhe(id);
+        return ResponseEntity.ok("Xóa ghế thành công!");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<GheResponse>> searchGhe(
+            @RequestParam(required = false, defaultValue = "") String keyword) {
+        return ResponseEntity.ok(gheService.searchGhe(keyword));
+    }
+}

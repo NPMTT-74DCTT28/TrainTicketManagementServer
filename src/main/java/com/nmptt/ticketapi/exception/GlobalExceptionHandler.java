@@ -1,6 +1,7 @@
 package com.nmptt.ticketapi.exception;
 
 import com.nmptt.ticketapi.dto.response.ApiResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,16 +20,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
-        return getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi hệ thống: " + e.getMessage());
+        return getResponse(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Đã xảy ra lỗi hệ thống: " + e.getMessage());
     }
 
     @ExceptionHandler(DuplicateDataException.class)
     public ResponseEntity<ApiResponse<Void>> handleDuplicateDataException(DuplicateDataException e) {
-        return getResponse(HttpStatus.CONFLICT, e.getMessage());
+        return getResponse(HttpStatus.CONFLICT,
+                "Lỗi trùng lặp dữ liệu: " + e.getMessage());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleResourceNotFoundException(ResourceNotFoundException e) {
-        return getResponse(HttpStatus.NOT_FOUND, e.getMessage());
+        return getResponse(HttpStatus.NOT_FOUND,
+                "Lỗi không tìm thấy tài nguyên: " + e.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        return getResponse(HttpStatus.BAD_REQUEST,
+                "Xảy ra lỗi vi phạm tính toàn vẹn dữ liệu: " + e.getMessage());
     }
 }
