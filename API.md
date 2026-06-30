@@ -241,7 +241,7 @@ Phản hồi đều bọc `ApiResponse<List<...>>` (trừ khi lỗi). Một số
 | `doanh-so`              | `DoanhSoDTO` — `maNhanVien`, `hoTen`, `soVeBan`, `doanhSo` |
 
 Dữ liệu thống kê doanh thu trong CSDL thường chỉ tính vé **Đã thanh toán** (theo stored procedure trong
-`sql/quan_ly_ban_ve_tau.sql`).
+`sql/quan_ly_ve_tau.sql`).
 
 ---
 
@@ -265,7 +265,7 @@ Khi tích hợp, client cần parse JSON trực tiếp, không dùng cùng parse
 ## 8. Cấu hình & CSDL
 
 - JDBC & JPA: `src/main/resources/application.properties`
-- Script mẫu: `sql/quan_ly_ban_ve_tau.sql`
+- Script mẫu: `sql/quan_ly_ve_tau.sql`
 - JWT bí mật: `jwt.secret-key` — **không** nên commit giá trị production; dùng biến môi trường hoặc vault khi triển khai
   thật.
 

@@ -1,0 +1,53 @@
+name: qlvt_server
+
+services:
+  #Spring Boot
+  api-server:
+    build: .
+    container_name: spring_boot_api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_APPLICATION_NAME=TrainTicketManagementServer
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://database:3306/quan_ly_ban_ve_tau?useUnicode=true&characterEncoding=UTF-8
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.mariadb.jdbc.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - JWT_SECRET_KEY=eZwRBl4mPxrwhHPpYlwZrc1refIEeuiCzVR4anVBj2iXKadxwNtO7tKWFVTc7Epn
+      - JAVA_OPTS=-Xmx350m
+    depends_on:
+      - database
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 300M
+
+  #MariaDB
+  database:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=1
+      - MARIADB_ROOT_PASSWORD=
+      - MARIADB_DATABASE=quan_ly_ban_ve_tau
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./sql/quan_ly_ban_ve_tau.sql:/docker-entrypoint-initdb.d/quan_ly_ban_ve_tau.sql
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+volumes:
+  mariadb_data:
